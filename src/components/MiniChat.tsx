@@ -9,7 +9,7 @@ import { addDoc, collection } from 'firebase/firestore/lite'
 
 
 export default function MiniChat() {
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(false)
     const [name, setName] = useState('rahul')
     const [email, setEmail] = useState('rahul.dora21@gmail.com')
     const [chatId, setChatId] = useState("")

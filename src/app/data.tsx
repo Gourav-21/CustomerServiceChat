@@ -16,7 +16,7 @@ export const userData = [
                 message: 'Hey!',
             },
             {
-                id : 3,
+                id: 3,
                 avatar: '/User1.png',
                 name: 'Jane Doe',
                 message: 'How are you?',
@@ -97,6 +97,14 @@ export interface Message {
 
 export interface User {
     id: number;
+    avatar: string;
+    messages: Message[];
+    name: string;
+}
+
+export interface messagesProp {
+    id: string;
+    email:string,
     avatar: string;
     messages: Message[];
     name: string;

@@ -80,7 +80,7 @@ export const userData = [
 export type UserData = (typeof userData)[number];
 
 export const loggedInUserData = {
-    id: 5,
+    email: 'jakobhoeg@gmail.com',
     avatar: '/LoggedInUser.jpg',
     name: 'Jakob Hoeg',
 };
@@ -92,6 +92,7 @@ export interface Message {
     avatar: string;
     name: string;
     message: string;
+    email?: string;
 }
 
 export interface User {

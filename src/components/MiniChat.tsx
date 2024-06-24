@@ -5,36 +5,15 @@ import { Input } from "@/components/ui/input"
 import { Button } from './ui/button'
 import { db } from '@/lib/firebase'
 import { Chat } from './minichat/chat'
-import { addDoc, collection } from 'firebase/firestore/lite'
+import { addDoc, collection } from 'firebase/firestore'
+import { userData } from '@/app/data'
 
 
 export default function MiniChat() {
     const [show, setShow] = useState(false)
-    const [name, setName] = useState('rahul')
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('rahul.dora21@gmail.com')
     const [chatId, setChatId] = useState("")
-
-    const userData = [
-        {
-            id: 1,
-            avatar: '/User1.png',
-            messages: [
-                {
-                    id: 1,
-                    avatar: '/User1.png',
-                    name: 'Jane Doe',
-                    message: 'Hey, Jakob',
-                },
-                {
-                    id: 2,
-                    avatar: '/User1.png',
-                    name: 'Jane Doe',
-                    message: 'How can i help you?',
-                },
-            ],
-            name: 'Jane Doe',
-        }
-    ];
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()

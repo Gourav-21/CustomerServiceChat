@@ -1,4 +1,4 @@
-export const userData = [
+export const userData =  [
     {
         id: 1,
         avatar: '/User1.png',
@@ -11,69 +11,12 @@ export const userData = [
             },
             {
                 id: 2,
-                avatar: '/LoggedInUser.jpg',
-                name: 'Jakob Hoeg',
-                message: 'Hey!',
-            },
-            {
-                id: 3,
                 avatar: '/User1.png',
                 name: 'Jane Doe',
-                message: 'How are you?',
+                message: 'How can i help you?',
             },
-            {
-                id: 4,
-                avatar: '/LoggedInUser.jpg',
-                name: 'Jakob Hoeg',
-                message: 'I am good, you?',
-            },
-            {
-                id: 5,
-                avatar: '/User1.png',
-                name: 'Jane Doe',
-                message: 'I am good too!',
-            },
-            {
-                id: 6,
-                avatar: '/LoggedInUser.jpg',
-                name: 'Jakob Hoeg',
-                message: 'That is good to hear!'
-            },
-            {
-                id: 7,
-                avatar: '/User1.png',
-                name: 'Jane Doe',
-                message: 'How has your day been so far?',
-            },
-            {
-                id: 8,
-                avatar: '/LoggedInUser.jpg',
-                name: 'Jakob Hoeg',
-                message: 'It has been good. I went for a run this morning and then had a nice breakfast. How about you?',
-            },
-            {
-                id: 9,
-                avatar: '/User1.png',
-                name: 'Jane Doe',
-                message: 'I had a relaxing day. Just catching up on some reading.',
-            }
         ],
         name: 'Jane Doe',
-    },
-    {
-        id: 2,
-        avatar: '/User2.png',
-        name: 'John Doe',
-    },
-    {
-        id: 3,
-        avatar: '/User3.png',
-        name: 'Elizabeth Smith',
-    },
-    {
-        id: 4,
-        avatar: '/User4.png',
-        name: 'John Smith',
     }
 ];
 
@@ -93,6 +36,7 @@ export interface Message {
     name: string;
     message: string;
     email?: string;
+    createdAt?: Date;
 }
 
 export interface User {

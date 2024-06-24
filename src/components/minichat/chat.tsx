@@ -1,9 +1,11 @@
-import { LoggedInUserData, Message, UserData } from "@/app/data";
-import React from "react";
+import { LoggedInUserData, Message, UserData, userData } from "@/app/data";
+import React, { useEffect } from "react";
 import ChatTopbar from "./chat-topbar";
 import { ChatList } from "./chat-list";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+
 
 interface ChatProps {
   messages?: Message[];
@@ -17,6 +19,26 @@ export function Chat({ messages, selectedUser, isMobile, loggedInUserData, chatI
   const [messagesState, setMessages] = React.useState<Message[]>(
     messages ?? []
   );
+
+  useEffect(() => {
+    if (!selectedUser.id) {
+      return;
+    }
+    const q = query(collection(db, "issues", chatId, "messages"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const newMessages = querySnapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            setMessages((p)=>([...p,change.doc.data()]))
+        }
+      });
+      // setMessages((p)=>([...p,newMessages])); // Update the state
+    });
+  
+    return () => {
+      unsubscribe();
+      setMessages(userData[0].messages ?? []);
+    };
+  }, []);
 
   const sendMessage = async (newMessage: Message) => {
     try {

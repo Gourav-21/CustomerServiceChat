@@ -63,7 +63,7 @@ export function ChatLayout({
           query(messagesCollectionRef, orderBy("createdAt", "desc"), limit(1)),
           (messagesSnapshot) => {
             const message : Message[] = messagesSnapshot.docs.map((messageDoc) => ({
-              ...messageDoc.data(),
+              ...messageDoc.data() as Message,
               id: messageDoc.id,
             }));
 

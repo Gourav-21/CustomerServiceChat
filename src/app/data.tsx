@@ -1,16 +1,16 @@
 export const userData =  [
     {
-        id: 1,
+        id: '1',
         avatar: '/User1.png',
         messages: [
             {
-                id: 1,
+                id: "1",
                 avatar: '/User1.png',
                 name: 'Jane Doe',
                 message: 'Hey, Jakob',
             },
             {
-                id: 2,
+                id: "2",
                 avatar: '/User1.png',
                 name: 'Jane Doe',
                 message: 'How can i help you?',
@@ -36,7 +36,7 @@ export const loggedInUserData2 = {
 export type LoggedInUserData = (typeof loggedInUserData);
 
 export interface Message {
-    id: number;
+    id: string;
     avatar: string;
     name: string;
     message: string;

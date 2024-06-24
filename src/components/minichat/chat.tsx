@@ -28,7 +28,7 @@ export function Chat({ messages, selectedUser, isMobile, loggedInUserData, chatI
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const newMessages = querySnapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-            setMessages((p)=>([...p,change.doc.data()]))
+            setMessages((p)=>([...p,change.doc.data() as Message]))
         }
       });
     });

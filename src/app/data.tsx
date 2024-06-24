@@ -27,6 +27,11 @@ export const loggedInUserData = {
     avatar: '/LoggedInUser.jpg',
     name: 'Jakob Hoeg',
 };
+export const loggedInUserData2 = {
+    email: 'janeobhoeg@gmail.com',
+    avatar: '/User1.png',
+    name: 'Jane Doe',
+};
 
 export type LoggedInUserData = (typeof loggedInUserData);
 

@@ -12,7 +12,7 @@ interface ChatProps {
   messages?: Message[];
   selectedUser: messagesProp;
   isMobile: boolean;
-  setSelectedUser: React.Dispatch<SetStateAction<messagesProp>>;
+  setSelectedUser: React.Dispatch<SetStateAction<messagesProp|null>>;
 
 }
 
@@ -20,7 +20,7 @@ export function Chat({ selectedUser, isMobile, setSelectedUser }: ChatProps) {
   const [messagesState, setMessages] = React.useState<Message[]>([]);
 
   useEffect(() => {
-    if (selectedUser.id == undefined) {
+    if (selectedUser?.id == undefined) {
       return;
     }
     const q = query(collection(db, "issues", selectedUser.id, "messages"), orderBy("createdAt", "asc"), limit(30));

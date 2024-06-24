@@ -1,6 +1,6 @@
 "use client";
 
-import { messagesProp } from "@/app/data";
+import { Message, messagesProp } from "@/app/data";
 import React, { useEffect, useState } from "react";
 import {
   ResizableHandle,
@@ -26,7 +26,7 @@ export function ChatLayout({
 }: ChatLayoutProps) {
   const [messages, setMessages] = React.useState<messagesProp[]>([]);
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedUser, setSelectedUser] = React.useState<messagesProp>();
+  const [selectedUser, setSelectedUser] = React.useState<messagesProp|null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -62,22 +62,22 @@ export function ChatLayout({
         const messagesUnsubscribe = onSnapshot(
           query(messagesCollectionRef, orderBy("createdAt", "desc"), limit(1)),
           (messagesSnapshot) => {
-            const message = messagesSnapshot.docs.map((messageDoc) => ({
+            const message : Message[] = messagesSnapshot.docs.map((messageDoc) => ({
               ...messageDoc.data(),
               id: messageDoc.id,
             }));
 
             // Update the issue with the latest messages
-            const newMessage = { id: issueId, ...issueData, messages: message }
+            const newMessage = { id: issueId, ...issueData, messages: message } as messagesProp;
+
 
 
             setMessages((p) => {
-              var updatedMessages = [...p];
-              console.log(updatedMessages);
+              var updatedMessages: messagesProp[] = [...p];
               const index = updatedMessages.findIndex((element) => element.id === newMessage.id);
               if (index !== -1) {
                 if (newMessage.messages.length > 0) {
-                  updatedMessages[index] = newMessage;
+                  updatedMessages[index] = newMessage ;
                 } else {
                   updatedMessages.splice(index, 1);
                 }
@@ -158,7 +158,7 @@ export function ChatLayout({
         <Chat
           messages={selectedUser?.messages}
           selectedUser={selectedUser as messagesProp}
-          setSelectedUser={setSelectedUser as React.Dispatch<React.SetStateAction<messagesProp>>}
+          setSelectedUser={setSelectedUser as React.Dispatch<React.SetStateAction<messagesProp|null>>}
           isMobile={isMobile}
         />
       </ResizablePanel>

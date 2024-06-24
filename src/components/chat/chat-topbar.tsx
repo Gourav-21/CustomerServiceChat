@@ -16,19 +16,15 @@ export default function ChatTopbar({ selectedUser }: ChatTopbarProps) {
 
   async function Delete(id: string) {
     try {
-      // 1. Get a reference to the issue document
       const issueDocRef = doc(db, "issues", id);
 
-      // 2. Get all subcollection documents (messages)
       const messagesCollectionRef = collection(issueDocRef, "messages");
       const messagesSnapshot = await getDocs(messagesCollectionRef);
 
-      // 3. Delete each message document
       messagesSnapshot.forEach((messageDoc) => {
         deleteDoc(doc(messagesCollectionRef, messageDoc.id));
       });
 
-      // 4. Delete the issue document itself
       await deleteDoc(issueDocRef);
 
       console.log("Issue and its subcollections deleted successfully.");

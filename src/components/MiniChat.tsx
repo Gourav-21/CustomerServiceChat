@@ -6,7 +6,7 @@ import { Button } from './ui/button'
 import { db } from '@/lib/firebase'
 import { addDoc, collection } from 'firebase/firestore'
 import { userData } from '@/app/data'
-import { Chat } from './chat/chat'
+import { Chat } from './minichat/chat'
 
 
 export default function MiniChat() {

@@ -31,7 +31,6 @@ export function Chat({ messages, selectedUser, isMobile, loggedInUserData, chatI
             setMessages((p)=>([...p,change.doc.data()]))
         }
       });
-      // setMessages((p)=>([...p,newMessages])); // Update the state
     });
   
     return () => {

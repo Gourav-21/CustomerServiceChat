@@ -33,6 +33,7 @@ export default function ChatBottombar({
       name: loggedInUserData.name,
       avatar: loggedInUserData.avatar,
       message: "👍",
+      createdAt: new Date()
     };
     sendMessage(newMessage);
     setMessage("");
@@ -45,6 +46,7 @@ export default function ChatBottombar({
         name: loggedInUserData.name,
         avatar: loggedInUserData.avatar,
         message: message.trim(),
+        createdAt: new Date()
       };
       sendMessage(newMessage);
       setMessage("");

@@ -9,24 +9,24 @@ import {
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 import { Sidebar } from "../sidebar";
+import { collection, getDocs, limit, onSnapshot, orderBy, query } from "firebase/firestore";
 import { Chat } from "./chat";
+import { db } from "@/lib/firebase";
 
 interface ChatLayoutProps {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
-  messages: messagesProp[];
 }
 
 export function ChatLayout({
   defaultLayout = [320, 480],
   defaultCollapsed = false,
   navCollapsedSize,
-  messages,
 }: ChatLayoutProps) {
+  const [messages, setMessages] = React.useState<messagesProp[]>([]);
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedUser, setSelectedUser] = React.useState(messages[0]);
-  console.log(selectedUser);
+  const [selectedUser, setSelectedUser] = React.useState(messages[0] ?? []);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -45,6 +45,53 @@ export function ChatLayout({
       window.removeEventListener("resize", checkScreenWidth);
     };
   }, []);
+
+  useEffect(() => {
+    const issuesCollectionRef = collection(db, "issues");
+
+    // Listen for changes in the "issues" collection
+    const unsubscribe = onSnapshot(issuesCollectionRef, (issuesSnapshot) => {
+      setMessages([]);
+      const issues = issuesSnapshot.docs.map((issueDoc) => {
+        const issueId = issueDoc.id;
+        const issueData = issueDoc.data();
+
+        // Listen for changes in the "messages" subcollection for this issue
+        const messagesCollectionRef = collection(db, "issues", issueId, "messages");
+        const messagesUnsubscribe = onSnapshot(
+          query(messagesCollectionRef,orderBy("timestamp", "desc"), limit(1)),
+          (messagesSnapshot) => {
+            const messages = messagesSnapshot.docs.map((messageDoc) => ({
+              ...messageDoc.data(),
+              id: messageDoc.id,
+            }));
+
+            // Update the issue with the latest messages
+            setMessages((prevMessages) => ([
+              ...prevMessages,
+              { id: issueId, ...issueData, messages: messages },
+            ]));
+
+            // console.log("Issue:", issueId, "Messages:", messages);
+            // You can update your UI or perform other actions here
+          }
+        );
+
+        // Unsubscribe from the messages listener when the issue is deleted
+        return () => messagesUnsubscribe();
+      });
+
+      // Unsubscribe from the issues listener when you no longer need to listen
+      return () => issues.forEach((unsubscribe) => unsubscribe());
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+
+  // console.log(messages)
 
   return (
     <ResizablePanelGroup

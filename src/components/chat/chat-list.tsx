@@ -1,4 +1,4 @@
-import { Message, UserData, messagesProp } from "@/app/data";
+import { Message, messagesProp } from "@/app/data";
 import { cn } from "@/lib/utils";
 import React, { useRef } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";

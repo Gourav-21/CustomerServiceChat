@@ -10,12 +10,14 @@ import { db } from '@/lib/firebase';
 
 interface ChatTopbarProps {
   selectedUser: messagesProp;
+  setSelectedUser: React.Dispatch<React.SetStateAction<messagesProp>>;
 }
 
-export default function ChatTopbar({ selectedUser }: ChatTopbarProps) {
+export default function ChatTopbar({ selectedUser, setSelectedUser }: ChatTopbarProps) {
 
   async function Delete(id: string) {
     try {
+      setSelectedUser([]);
       const issueDocRef = doc(db, "issues", id);
 
       const messagesCollectionRef = collection(issueDocRef, "messages");

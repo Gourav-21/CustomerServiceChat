@@ -1,6 +1,6 @@
 "use client";
 
-import { messagesProp, userData } from "@/app/data";
+import { messagesProp } from "@/app/data";
 import React, { useEffect, useState } from "react";
 import {
   ResizableHandle,
@@ -26,7 +26,7 @@ export function ChatLayout({
 }: ChatLayoutProps) {
   const [messages, setMessages] = React.useState<messagesProp[]>([]);
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedUser, setSelectedUser] = React.useState(messages[0] ?? []);
+  const [selectedUser, setSelectedUser] = React.useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -46,8 +46,9 @@ export function ChatLayout({
     };
   }, []);
 
+  const issuesCollectionRef = collection(db, "issues");
+
   useEffect(() => {
-    const issuesCollectionRef = collection(db, "issues");
 
     // Listen for changes in the "issues" collection
     const unsubscribe = onSnapshot(issuesCollectionRef, (issuesSnapshot) => {
@@ -59,7 +60,7 @@ export function ChatLayout({
         // Listen for changes in the "messages" subcollection for this issue
         const messagesCollectionRef = collection(db, "issues", issueId, "messages");
         const messagesUnsubscribe = onSnapshot(
-          query(messagesCollectionRef,orderBy("timestamp", "desc"), limit(1)),
+          query(messagesCollectionRef, orderBy("createdAt", "desc"), limit(1)),
           (messagesSnapshot) => {
             const messages = messagesSnapshot.docs.map((messageDoc) => ({
               ...messageDoc.data(),
@@ -67,13 +68,8 @@ export function ChatLayout({
             }));
 
             // Update the issue with the latest messages
-            setMessages((prevMessages) => ([
-              ...prevMessages,
-              { id: issueId, ...issueData, messages: messages },
-            ]));
+            setMessages((p) => [...p, { id: issueId, ...issueData, messages }]);
 
-            // console.log("Issue:", issueId, "Messages:", messages);
-            // You can update your UI or perform other actions here
           }
         );
 
@@ -91,7 +87,7 @@ export function ChatLayout({
   }, []);
 
 
-  // console.log(messages)
+  console.log(selectedUser);
 
   return (
     <ResizablePanelGroup
@@ -144,6 +140,7 @@ export function ChatLayout({
         <Chat
           messages={selectedUser?.messages}
           selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
           isMobile={isMobile}
         />
       </ResizablePanel>

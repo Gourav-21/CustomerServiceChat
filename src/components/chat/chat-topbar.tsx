@@ -17,7 +17,7 @@ export default function ChatTopbar({ selectedUser, setSelectedUser }: ChatTopbar
 
   async function Delete(id: string) {
     try {
-      setSelectedUser([]);
+      setSelectedUser({});
       const issueDocRef = doc(db, "issues", id);
 
       const messagesCollectionRef = collection(issueDocRef, "messages");

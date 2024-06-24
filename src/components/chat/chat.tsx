@@ -18,14 +18,11 @@ interface ChatProps {
 
 export function Chat({ selectedUser, isMobile, setSelectedUser }: ChatProps) {
   const [messagesState, setMessages] = React.useState<Message[]>([]);
-  console.log(selectedUser)
 
   useEffect(() => {
     if (selectedUser.id == undefined) {
       return;
     }
-    console.log(selectedUser.id)
-    console.log(selectedUser)
     const q = query(collection(db, "issues", selectedUser.id, "messages"), orderBy("createdAt", "asc"), limit(30));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const messages: Message[] = [];

@@ -52,7 +52,7 @@ export function ChatLayout({
 
     // Listen for changes in the "issues" collection
     const unsubscribe = onSnapshot(issuesCollectionRef, (issuesSnapshot) => {
-      setMessages([]);
+      // setMessages([]);
       const issues = issuesSnapshot.docs.map((issueDoc) => {
         const issueId = issueDoc.id;
         const issueData = issueDoc.data();
@@ -62,14 +62,31 @@ export function ChatLayout({
         const messagesUnsubscribe = onSnapshot(
           query(messagesCollectionRef, orderBy("createdAt", "desc"), limit(1)),
           (messagesSnapshot) => {
-            const messages = messagesSnapshot.docs.map((messageDoc) => ({
+            const message = messagesSnapshot.docs.map((messageDoc) => ({
               ...messageDoc.data(),
               id: messageDoc.id,
             }));
 
             // Update the issue with the latest messages
-            setMessages((p) => [...p, { id: issueId, ...issueData, messages }]);
+            const newMessage = { id: issueId, ...issueData, messages: message }
 
+
+            setMessages((p) => {
+              var updatedMessages = [...p];
+              console.log(updatedMessages);
+              const index = updatedMessages.findIndex((element) => element.id === newMessage.id);
+              if (index !== -1) {
+                if (newMessage.messages.length > 0) {
+                  updatedMessages[index] = newMessage;
+                } else {
+                  updatedMessages.splice(index, 1);
+                }
+              } else {
+                if(newMessage?.messages?.length > 0)
+                updatedMessages.push(newMessage);
+              }
+              return updatedMessages;
+            });
           }
         );
 
@@ -83,11 +100,12 @@ export function ChatLayout({
 
     return () => {
       unsubscribe();
+      setMessages([]);
     };
   }, []);
 
+  console.log(messages)
 
-  console.log(selectedUser);
 
   return (
     <ResizablePanelGroup

@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from './ui/button'
 import { db } from '@/lib/firebase'
-import { Chat } from './minichat/chat'
 import { addDoc, collection } from 'firebase/firestore'
 import { userData } from '@/app/data'
+import { Chat } from './chat/chat'
 
 
 export default function MiniChat() {

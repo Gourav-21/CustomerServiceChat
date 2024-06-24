@@ -1,3 +1,4 @@
+import { doc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import React from 'react'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { messagesProp } from '@/app/data';
@@ -5,7 +6,6 @@ import { Info, Phone, Trash2, Video } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '../ui/button';
-import { deleteDoc, doc } from 'firebase/firestore/lite';
 import { db } from '@/lib/firebase';
 
 interface ChatTopbarProps {
@@ -13,10 +13,28 @@ interface ChatTopbarProps {
 }
 
 export default function ChatTopbar({ selectedUser }: ChatTopbarProps) {
-  
+
   async function Delete(id: string) {
-    await deleteDoc(doc(db, "issues", id));
-    console.log("delete")
+    try {
+      // 1. Get a reference to the issue document
+      const issueDocRef = doc(db, "issues", id);
+
+      // 2. Get all subcollection documents (messages)
+      const messagesCollectionRef = collection(issueDocRef, "messages");
+      const messagesSnapshot = await getDocs(messagesCollectionRef);
+
+      // 3. Delete each message document
+      messagesSnapshot.forEach((messageDoc) => {
+        deleteDoc(doc(messagesCollectionRef, messageDoc.id));
+      });
+
+      // 4. Delete the issue document itself
+      await deleteDoc(issueDocRef);
+
+      console.log("Issue and its subcollections deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting issue and subcollections:", error);
+    }
   }
 
   return (
